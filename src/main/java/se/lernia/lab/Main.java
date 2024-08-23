@@ -14,6 +14,8 @@ public class Main {
 
 
     public static void main(String[] args) {
+
+
         String selection = "";
 
         while (!selection.equalsIgnoreCase("e")) {
@@ -32,7 +34,7 @@ public class Main {
                     handleBestLoadingTime(hourlyPrices);
                     break;
                 case "5":
-                    handleElectricityPrices();
+                    handleElectricityPrices(hourlyPrices);
                     break;
                 case "e":
                     System.out.println("Programmet avslutas.");
@@ -170,7 +172,10 @@ public class Main {
         System.out.println("Medelpriset under dessa timmar är: " + String.format("%.2f", bestAverage) + " öre per kWh.");
     }
 
-    private static void handleElectricityPrices() {
+    private static void handleElectricityPrices(List<HourlyPrice> hourlyPrices) {
+
+        hourlyPrices.clear();
+
         String file = "src/main/resources/elpriser.csv";
         BufferedReader reader = null;
         String line = "";
@@ -178,7 +183,23 @@ public class Main {
         try {
             reader = new BufferedReader(new FileReader(file));
             while ((line = reader.readLine()) != null) {
+
                 String[] row = line.split(",");
+
+                try {
+
+                    String hour = row[0].trim();
+
+                    double price = Double.parseDouble(row[1].trim());
+
+                    int hourAsInt = Integer.parseInt(hour.split(":")[0]);
+
+                    HourlyPrice hourlyPrice = new HourlyPrice(hourAsInt, (int) price);
+                    hourlyPrices.add(hourlyPrice);
+
+                } catch (NumberFormatException e) {
+                    continue;
+                }
 
                 for (String index : row) {
                     System.out.printf("%-10s", index);
@@ -198,7 +219,6 @@ public class Main {
             }
         }
     }
-
 }
 
 
