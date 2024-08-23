@@ -2,7 +2,7 @@ package se.lernia.lab;
 
 public class HourlyPrice implements Comparable<HourlyPrice> {
     private final int hour;
-    private int price;
+    private final int price;
 
     public HourlyPrice(int hour, int price) {
         this.hour = hour;

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8f840c4-348d-4f5f-843d-12a38f5a6404" name="Changes" comment="Program for inserting electricity prices, calculating min, max and average, sorting, to show best loading time for 4 consecutive hours, and reading a .csv file with electricity prices.">
+    <list default="true" id="f8f840c4-348d-4f5f-843d-12a38f5a6404" name="Changes" comment="Removed unused method, set int hour to final as it never changes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/se/lernia/lab/HourlyPrice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/se/lernia/lab/HourlyPrice.java" afterDir="false" />
     </list>
@@ -23,10 +23,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "oskber"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/oskber/java_lab1.git",
+    "accountId": "c8e18cab-1a13-4bbe-8612-a78a1cd84aa0"
+  }
+}]]></component>
   <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
   <component name="KubernetesApiProvider"><![CDATA[{
   "isMigrated": true
 }]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 3
 }]]></component>
@@ -95,7 +110,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1724233878843</updated>
-      <workItem from="1724233879947" duration="25114000" />
+      <workItem from="1724233879947" duration="25581000" />
     </task>
     <task id="LOCAL-00001" summary="Program for inserting electricity prices, calculating min, max and average, sorting, to show best loading time for 4 consecutive hours, and reading a .csv file with electricity prices.">
       <option name="closed" value="true" />
@@ -105,7 +120,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724396244027</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Removed unused method, set int hour to final as it never changes.">
+      <option name="closed" value="true" />
+      <created>1724396596379</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1724396596379</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -113,6 +136,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Program for inserting electricity prices, calculating min, max and average, sorting, to show best loading time for 4 consecutive hours, and reading a .csv file with electricity prices." />
-    <option name="LAST_COMMIT_MESSAGE" value="Program for inserting electricity prices, calculating min, max and average, sorting, to show best loading time for 4 consecutive hours, and reading a .csv file with electricity prices." />
+    <MESSAGE value="Removed unused method, set int hour to final as it never changes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unused method, set int hour to final as it never changes." />
   </component>
 </project>
