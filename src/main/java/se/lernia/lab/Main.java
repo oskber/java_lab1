@@ -175,8 +175,10 @@ public class Main {
     private static void handleElectricityPrices(List<HourlyPrice> hourlyPrices) {
 
         hourlyPrices.clear();
+        String projectDir = System.getProperty("user.dir") + "/lab1";
+        String file = projectDir + "/src/main/resources/elpriser.csv";
 
-        String file = "src/main/resources/elpriser.csv";
+
         BufferedReader reader = null;
         String line = "";
 
@@ -185,6 +187,7 @@ public class Main {
             while ((line = reader.readLine()) != null) {
 
                 String[] row = line.split(",");
+
 
                 try {
 
