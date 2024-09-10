@@ -1,11 +1,14 @@
 package se.lernia.lab;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Comparator;
 import java.io.*;
+import java.time.LocalTime;
 
 
 public class Main {
@@ -66,7 +69,8 @@ public class Main {
         hourlyPrices.clear();
         for (int i = 0; i < 24; i++) {
             int price = getPriceForHour(i);
-            hourlyPrices.add(new HourlyPrice(i, price));
+            LocalTime hour = LocalTime.of(i, 0);
+            hourlyPrices.add(new HourlyPrice(hour, price));
         }
         System.out.println("Priser för dygnet har registrerats");
 
@@ -98,12 +102,12 @@ public class Main {
         int minPrice = Integer.MAX_VALUE;
         int maxPrice = Integer.MIN_VALUE;
         int totalPrice = 0;
-        int minHour = -1;
-        int maxHour = -1;
+        LocalTime minHour = null;
+        LocalTime maxHour = null;
 
         for (HourlyPrice hourlyPrice : hourlyPrices) {
-            int price = hourlyPrice.getPrice();
-            int hour = hourlyPrice.getHour();
+            int price = hourlyPrice.price();
+            LocalTime hour = hourlyPrice.hour();
 
             if (price < minPrice) {
                 minPrice = price;
@@ -118,8 +122,8 @@ public class Main {
 
         double averagePrice = totalPrice / hourlyPrices.size();
 
-        System.out.println("Lägsta priset: " + minPrice + " öre kl: " + minHour + ":00-" + (minHour + 1) + ":00");
-        System.out.println("Högsta priset: " + maxPrice + " öre kl: " + maxHour + ":00-" + (maxHour + 1) + ":00");
+        System.out.println("Lägsta priset: " + minPrice + " öre kl: " + minHour + ":00-" + minHour.plusHours(1) + ":00");
+        System.out.println("Högsta priset: " + maxPrice + " öre kl: " + maxHour + ":00-" + maxHour.plusHours(1) + ":00");
         System.out.printf("Genomsnittligt pris: %.2f öre\n", averagePrice);
     }
 
@@ -139,7 +143,7 @@ public class Main {
 
     private static void handleBestLoadingTime(List<HourlyPrice> hourlyPrices) {
 
-        Collections.sort(hourlyPrices, Comparator.comparingInt(HourlyPrice::getHour));
+        hourlyPrices.sort(Comparator.comparing(HourlyPrice::hour));
 
         int k = 4;
         int n = hourlyPrices.size();
@@ -150,79 +154,68 @@ public class Main {
         }
 
         int minSum = Integer.MAX_VALUE;
-        int bestStartHour = 0;
+        LocalTime bestStartHour = null;
         double bestAverage = 0.0;
 
         for (int i = 0; i <= n - k; i++) {
             int sum = 0;
             for (int j = 0; j < k; j++) {
-                sum += hourlyPrices.get(i + j).getPrice();
+                sum += hourlyPrices.get(i + j).price();
             }
 
             double average = (double) sum / k;
 
             if (sum < minSum) {
                 minSum = sum;
-                bestStartHour = hourlyPrices.get(i).getHour();
+                bestStartHour = hourlyPrices.get(i).hour();
                 bestAverage = average;
             }
         }
 
-        System.out.println("Bästa laddningstid för " + k + " timmar är från " + bestStartHour + ":00 till " + (bestStartHour + k) + ":00 med totalt " + minSum + " öre.");
+        System.out.println("Bästa laddningstid för " + k + " timmar är från " + bestStartHour + ":00 till " + (bestStartHour.plusHours(k)) + ":00 med totalt " + minSum + " öre.");
         System.out.println("Medelpriset under dessa timmar är: " + String.format("%.2f", bestAverage) + " öre per kWh.");
     }
 
     private static void handleElectricityPrices(List<HourlyPrice> hourlyPrices) {
 
         hourlyPrices.clear();
-        String projectDir = System.getProperty("user.dir") + "/lab1";
+        String projectDir = System.getProperty("user.dir");
         String file = projectDir + "/src/main/resources/elpriser.csv";
 
 
-        BufferedReader reader = null;
         String line = "";
 
-        try {
-            reader = new BufferedReader(new FileReader(file));
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            boolean isFirstLine = true;
             while ((line = reader.readLine()) != null) {
-
+                if (isFirstLine) {
+                    line = removeBOM(line);
+                    isFirstLine = false;
+                }
                 String[] row = line.split(",");
-
-
                 try {
-
-                    String hour = row[0].trim();
-
+                    LocalTime hour = LocalTime.parse(row[0].trim(), DateTimeFormatter.ofPattern("H:mm"));
                     double price = Double.parseDouble(row[1].trim());
-
-                    int hourAsInt = Integer.parseInt(hour.split(":")[0]);
-
-                    HourlyPrice hourlyPrice = new HourlyPrice(hourAsInt, (int) price);
+                    HourlyPrice hourlyPrice = new HourlyPrice(hour, (int) price);
                     hourlyPrices.add(hourlyPrice);
-
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException | DateTimeParseException e) {
                     continue;
                 }
-
                 for (String index : row) {
                     System.out.printf("%-10s", index);
                 }
                 System.out.println();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
+
+    private static String removeBOM(String line) {
+        if (line.startsWith("\uFEFF")) {
+            return line.substring(1);
+        }
+        return line;
+    }
 }
-
-
-

@@ -1,24 +1,11 @@
 package se.lernia.lab;
 
-public class HourlyPrice implements Comparable<HourlyPrice> {
-    private final int hour;
-    private final int price;
+import java.time.LocalTime;
 
-    public HourlyPrice(int hour, int price) {
-        this.hour = hour;
-        this.price = price;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public int getPrice() {
-        return price;
-    }
+public record HourlyPrice(LocalTime hour, int price) implements Comparable<HourlyPrice> {
 
     public String toString() {
-        return "Timme " + hour + "-" + (hour + 1) + ": " + price + " öre";
+        return "Timme " + hour + "-" + (hour.plusHours(1) + ": " + price + " öre");
     }
 
     public int compareTo(HourlyPrice other) {
